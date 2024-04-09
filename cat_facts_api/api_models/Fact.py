@@ -3,6 +3,8 @@ from typing import Optional, Any, TypeVar, Type, cast
 from datetime import datetime
 import dateutil.parser
 
+from cat_facts_api.api_models.FactById import FactByID
+
 
 T = TypeVar("T")
 
@@ -95,6 +97,7 @@ class Fact:
         used = from_union([from_bool, from_none], obj.get("used"))
         user = from_union([from_str, from_none], obj.get("user"))
         return Fact(v, id, created_at, deleted, source, status, text, type, updated_at, used, user)
+    
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -121,6 +124,21 @@ class Fact:
         if self.user is not None:
             result["user"] = from_union([from_str, from_none], self.user)
         return result
+    
+    
+    def __eq__(self, other):
+        if isinstance(other, FactByID):
+            assert self.v == other.v
+            assert self.id == other.id
+            assert self.user == other.user.id # different structure, lazy
+            assert self.created_at == other.created_at
+            assert self.deleted == other.deleted
+            assert self.status.to_dict() == other.status.to_dict() # would be better to to have a more solid model, lazy
+            assert self.text == other.text
+            assert self.type == other.type
+            assert self.updated_at == other.updated_at
+            return True
+        return False
 
 
 def fact_from_dict(s: Any) -> Fact:
