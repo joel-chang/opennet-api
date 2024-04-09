@@ -1,0 +1,2 @@
+class CatApiException(Exception):
+    pass
