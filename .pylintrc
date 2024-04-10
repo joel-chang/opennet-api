@@ -1,3 +1,0 @@
-[MASTER]
-ignore-paths = ^cat_facts_api/api_models/.*$
-disable = C0114, C0115, C0116
