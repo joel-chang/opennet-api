@@ -1,5 +1,5 @@
-import pytest
 import random
+import pytest
 
 from cat_facts_api.api_models.FactList import FactList
 from cat_facts_api.api_models.Fact import Fact
@@ -8,8 +8,8 @@ from cat_facts_api.exceptions import CatApiException
 from cat_facts_api.rest_adapter import RestAdapter
 
 
-@pytest.fixture
-def default_cat():
+@pytest.fixture(name="default_cat")
+def fixture_default_cat():
     catapi = RestAdapter('cat-fact.herokuapp.com')
     return catapi
 
@@ -74,7 +74,7 @@ def test_nonexisting_animal_types(default_cat):
     assert len(fact_list.items) == 0
 
 
-def test_eq_1_returns_single_fact_not_list(default_cat):
+def test_eq_1_returns_single_fact_not_list():
     pass
 
 

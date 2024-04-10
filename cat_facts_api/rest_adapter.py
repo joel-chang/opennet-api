@@ -1,16 +1,15 @@
-import json
-import requests
-import requests.packages
 from typing import List, Dict
 from json import JSONDecodeError
 import logging
+import requests
+import requests.packages
 from cat_facts_api.exceptions import CatApiException
 from cat_facts_api.result import Result
 
 
 class RestAdapter:
     def __init__(self, hostname: str, logger: logging.Logger = None):
-        self.url = "https://{}/".format(hostname)
+        self.url = f"https://{hostname}/"
         self._logger = logger or logging.getLogger(__name__)
 
     def _do(
@@ -21,8 +20,8 @@ class RestAdapter:
             data: Dict = None) -> Result:
         full_url = self.url + endpoint
         log_line_pre = f"method={http_method}, url={full_url}, params={ep_params}"
-        log_line_post = ', '.join(
-            (log_line_pre, "success={}, status_code={}, message={}"))
+        # log_line_post = ', '.join(
+        #     (log_line_pre, "success={}, status_code={}, message={}"))
 
         try:
             self._logger.debug(msg=log_line_pre)
@@ -30,9 +29,10 @@ class RestAdapter:
                 method=http_method,
                 url=full_url,
                 params=ep_params,
-                json=data)
+                json=data,
+                timeout=10)
         except requests.exceptions.RequestException as e:
-            self._logger.error(msg=(str(e)))
+            self._logger.error(msg=str(e))
             raise CatApiException("Request failed") from e
 
         try:

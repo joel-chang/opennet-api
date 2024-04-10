@@ -62,9 +62,11 @@ class Status:
     def to_dict(self) -> dict:
         result: dict = {}
         if self.sent_count is not None:
-            result["sentCount"] = from_union([from_int, from_none], self.sent_count)
+            result["sentCount"] = from_union(
+                [from_int, from_none], self.sent_count)
         if self.verified is not None:
-            result["verified"] = from_union([from_bool, from_none], self.verified)
+            result["verified"] = from_union(
+                [from_bool, from_none], self.verified)
         return result
 
 
@@ -87,17 +89,18 @@ class Fact:
         assert isinstance(obj, dict)
         v = from_union([from_int, from_none], obj.get("__v"))
         id = from_union([from_str, from_none], obj.get("_id"))
-        created_at = from_union([from_datetime, from_none], obj.get("createdAt"))
+        created_at = from_union(
+            [from_datetime, from_none], obj.get("createdAt"))
         deleted = from_union([from_bool, from_none], obj.get("deleted"))
         source = from_union([from_str, from_none], obj.get("source"))
         status = from_union([Status.from_dict, from_none], obj.get("status"))
         text = from_union([from_str, from_none], obj.get("text"))
         type = from_union([from_str, from_none], obj.get("type"))
-        updated_at = from_union([from_datetime, from_none], obj.get("updatedAt"))
+        updated_at = from_union(
+            [from_datetime, from_none], obj.get("updatedAt"))
         used = from_union([from_bool, from_none], obj.get("used"))
         user = from_union([from_str, from_none], obj.get("user"))
         return Fact(v, id, created_at, deleted, source, status, text, type, updated_at, used, user)
-    
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -106,34 +109,38 @@ class Fact:
         if self.id is not None:
             result["_id"] = from_union([from_str, from_none], self.id)
         if self.created_at is not None:
-            result["createdAt"] = from_union([lambda x: x.isoformat(), from_none], self.created_at)
+            result["createdAt"] = from_union(
+                [lambda x: x.isoformat(), from_none], self.created_at)
         if self.deleted is not None:
-            result["deleted"] = from_union([from_bool, from_none], self.deleted)
+            result["deleted"] = from_union(
+                [from_bool, from_none], self.deleted)
         if self.source is not None:
             result["source"] = from_union([from_str, from_none], self.source)
         if self.status is not None:
-            result["status"] = from_union([lambda x: to_class(Status, x), from_none], self.status)
+            result["status"] = from_union(
+                [lambda x: to_class(Status, x), from_none], self.status)
         if self.text is not None:
             result["text"] = from_union([from_str, from_none], self.text)
         if self.type is not None:
             result["type"] = from_union([from_str, from_none], self.type)
         if self.updated_at is not None:
-            result["updatedAt"] = from_union([lambda x: x.isoformat(), from_none], self.updated_at)
+            result["updatedAt"] = from_union(
+                [lambda x: x.isoformat(), from_none], self.updated_at)
         if self.used is not None:
             result["used"] = from_union([from_bool, from_none], self.used)
         if self.user is not None:
             result["user"] = from_union([from_str, from_none], self.user)
         return result
-    
-    
+
     def __eq__(self, other):
         if isinstance(other, FactByID):
             assert self.v == other.v
             assert self.id == other.id
-            assert self.user == other.user.id # different structure, lazy
+            assert self.user == other.user.id  # different structure, lazy
             assert self.created_at == other.created_at
             assert self.deleted == other.deleted
-            assert self.status.to_dict() == other.status.to_dict() # would be better to to have a more solid model, lazy
+            # would be better to to have a more solid model, lazy
+            assert self.status.to_dict() == other.status.to_dict()
             assert self.text == other.text
             assert self.type == other.type
             assert self.updated_at == other.updated_at
