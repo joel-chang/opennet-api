@@ -61,15 +61,22 @@ def test_multiple_types(default_cat):
     assert horse_count > 0
     assert cat_count > 0
 
+
 def test_nonexisting_animal_types(default_cat):
-    params = {'animal_type': 'pizza,car,Elon,Homelander', 'amount': random.randint(2, 500)}
+    params = {
+        'animal_type': 'pizza,car,Elon,Homelander',
+        'amount': random.randint(
+            2,
+            500)}
     res = default_cat.get('facts/random', ep_params=params)
     fact_list = FactList.from_list(res.data)
 
     assert len(fact_list.items) == 0
 
+
 def test_eq_1_returns_single_fact_not_list(default_cat):
     pass
+
 
 def test_gte_2_lte_500(default_cat):
     random_length = random.randint(2, 500)
@@ -104,7 +111,8 @@ def test_amount_lte_0_returns_empty_list(default_cat):
 
 def test_random_then_by_id(default_cat):
     # api abstraction is very barebones and models aren't well written (lazy)
-    # when querying a fact by :id and by /random, the resp structure is different (technically different endpoints, same dataclass + optional?)
+    # when querying a fact by :id and by /random, the resp structure is
+    # different (technically different endpoints, same dataclass + optional?)
     params = {'amount': 1}
     res0 = default_cat.get('facts/random', ep_params=params)
     fact0 = Fact.from_dict(res0.data)
